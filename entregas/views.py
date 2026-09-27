@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse, HttpResponse
 from django.views.decorators.http import require_http_methods
 from decimal import Decimal
+import uuid
 from .servicios import registrar_pedido, obtener_seguimiento_pedido
 from .proveedores_ia import ProveedorIAFalsoJSON, AdaptadorProveedorIAFalsoJSON, ProveedorIAFalsoXML, AdaptadorProveedorXML
 
@@ -20,7 +21,6 @@ def alta_pedido(request):
             'fecha_limite': request.POST['fecha_limite'],
             'idempotency_key': request.POST.get('idempotency_key'),
         }
-        import uuid
         proveedor_ia = AdaptadorProveedorIAFalsoJSON(ProveedorIAFalsoJSON())
         pedido = registrar_pedido(datos, proveedor_ia)
         return redirect('seguimiento_pedido', pedido_id=pedido.pk)
@@ -49,3 +49,12 @@ def reporte_pedido(request, pedido_id):
     </body></html>
     """
     return HttpResponse(html)
+
+def api_pedido(request, pedido_id):
+    contexto = obtener_seguimiento_pedido(pedido_id)
+    minimo = {
+        'folio': contexto['folio'],
+        'estado': contexto['estado'],
+        'eta': contexto['eta'],
+    }
+    return JsonResponse(minimo)
