@@ -10,7 +10,10 @@ class ProveedorSugerencia(ABC):
 
 class ProveedorIAFalsoJSON:
     def responder(self, pedido):
-        if pedido.peso > 5:
+        import random 
+        if random.random() < 0.5:
+            raise ConnectionError("Timeout del servicio de IA")
+        if pedido.peso <= 5:
             return {'route_hint': 'trafico_alto', 'score': 0.82, 'medio_sugerido': 'motocicleta'}
         return {'route_hint': 'distancia_larga', 'score': 0.65, 'medio_sugerido': 'camioneta'}
 

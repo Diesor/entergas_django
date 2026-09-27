@@ -1,10 +1,14 @@
 <h1>Pedido #{{ folio }}</h1>
 <p>Estado: {{ estado }}</p>
 <p>Origen: {{ origen }} → Destino: {{ destino }}</p>
+
+<div style="border:1px solid #ccc; padding:20px; text-align:center;">
+    [Mapa: {{ origen }} → {{ destino }}]
+</div>
 <p>ETA: {{ eta }}</p>
 
 <h2>Asignación</h2>
-<p>Medio: {{ medio }}</p>
+<p>Medio: {{ medio|capfirst }}</p>
 <p>Motivo: {{ motivo }}</p>
 <p>Costo estimado: ${{ costo_estimado }}</p>
 <p>Tiempo estimado: {{ tiempo_estimado_min }} min</p>

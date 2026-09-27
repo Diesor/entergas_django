@@ -1,5 +1,6 @@
 <form method="post">
     {% csrf_token %}
+    <input type="hidden" name="idempotency_key" value="{{ idempotency_key }}">
     <input name="origen" placeholder="Origen" required>
     <input name="destino" placeholder="Destino" required>
     <input name="peso" type="number" step="0.01" placeholder="Peso (kg)" required>
