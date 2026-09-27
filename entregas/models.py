@@ -17,7 +17,11 @@ class Pedido(models.Model):
     fecha_limite = models.DateTimeField()
     estado = models.CharField(max_length=20, choices=ESTADOS, default='registrado')
     fecha_creacion = models.DateTimeField(auto_now_add=True)
-
+    medio_asignado = models.CharField(max_length=50, blank=True)
+    motivo_asignacion = models.CharField(max_length=255, blank=True)
+    costo_estimado = models.DecimalField(max_digits=8, decimal_places=2, null=True, blank=True)
+    tiempo_estimado_min = models.IntegerField(null=True, blank=True)
     def __str__(self):
         return f"Pedido #{self.pk} ({self.estado})"
+
     

@@ -2,22 +2,24 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_http_methods
 from .servicios import registrar_pedido, obtener_seguimiento_pedido
-from .models import Pedido
+from .proveedores_ia import ProveedorIAFalsoJSON, AdaptadorProveedorIAFalsoJSON, ProveedorIAFalsoXML, AdaptadorProveedorXML
+from decimal import Decimal
 
 @require_http_methods(["GET","POST"])
 def alta_pedido(request):
     if request.method == "POST":
         datos = {
-            'origen': request.POST.get('origen'),
-            'destino': request.POST.get('destino'),
-            'peso': request.POST.get('peso'),
-            'largo': request.POST.get('largo'),
-            'ancho': request.POST.get('ancho'),
-            'alto': request.POST.get('alto'),
+            'origen': request.POST['origen'],
+            'destino': request.POST['destino'],
+            'peso': Decimal(request.POST['peso']),
+            'largo': Decimal(request.POST['largo']),
+            'ancho': Decimal(request.POST['ancho']),
+            'alto': Decimal(request.POST['alto']),
             'urgente': request.POST.get('urgente') == 'on',
-            'fecha_limite': request.POST.get('fecha_limite'),
+            'fecha_limite': request.POST['fecha_limite'],
         }
-        pedido = registrar_pedido(datos)
+        proveedor_ia = AdaptadorProveedorIAFalsoJSON(ProveedorIAFalsoJSON())
+        pedido = registrar_pedido(datos, proveedor_ia)
         return redirect('seguimiento_pedido', pedido_id=pedido.pk)
     return render(request, 'entregas/alta.html')
 
